@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 
 import CustomHeader from '../../header';
-
 import MovieList from '../../movie-list';
 import { IMovie } from '../../movie';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-
-import axios from "axios";
-import { getAllByTestId } from '@testing-library/react';
 import Filter from '../../filter';
 import { StarColors } from "../../rank"
 import Configuration from '../../configuration';
+import AddMovie from '../../add-movie'
+
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 
 function MoviesPageInternal() {
     const initialMovies: Array<any> | null = []
@@ -21,9 +20,9 @@ function MoviesPageInternal() {
     const [deletedMovies, setDeletedMovies] = useState(initialDeletedMovies)
     const [starsColor, setStarsColor] = useState(StarColors.secondary);
     const [alertConfig, setAlertConfig] = useState({ show: false, message: "" })
-    // const [getter, setter] = useState(Initial State)
     const [isLoading, setLoader] = useState(true)
-
+    const [visibilityAddMovieForm,setVisibilty]=useState("none");
+    // const [getter, setter] = useState(Initial State)
 
     async function getMoviesApi(searchValue: string = "") {
         setLoader(true)
@@ -32,7 +31,6 @@ function MoviesPageInternal() {
             const { data } = await axios.get(moviesUrl);
             if (data.Response === "False") throw Error("No Data From Api")
             setMovies(data.Search)
-
 
         } catch ({ message }) {
             setAlertConfig({ show: true, message })
@@ -46,12 +44,12 @@ function MoviesPageInternal() {
         }
     }
 
-
     function clearErrorMessage() {
         setTimeout(() => {
             setAlertConfig({ show: false, message: "" })
         }, 2000);
     }
+
     useEffect(() => {
         //this code will run: cases:
         // on initial render
@@ -72,10 +70,9 @@ function MoviesPageInternal() {
         setDeletedMovies([...deletedMoviesCopy])
     }
 
-    function addMovie() {
-        setMovies([...movies]) //example to show state - data[0] = from FORM
+    function addMovie(movie:IMovie) {
+        setMovies([...movies, movie]) //example to show state - data[0] = from FORM
     }
-
 
     function deleteMovie(moovieId: string): void {
         const moviesCopy = [...movies]
@@ -90,9 +87,15 @@ function MoviesPageInternal() {
 
         }
     }
+
+    function showMovieForm(){
+        setVisibilty("block")
+    }
+
     function filterOperationApi(value: string) {
         getMoviesApi(value)
     }
+    
     function filterOperation(value: string) {
         if (!value) return setMovies(movies);
         const filteredMovies = movies.filter(movie => movie.Title.toLowerCase().includes(value))
@@ -115,9 +118,10 @@ function MoviesPageInternal() {
         </div>
         <div className="row">
             <Button onClick={clearMovies} > clear Movies</Button>
-            <Button onClick={addMovie} > Add movie</Button>
+            <Button onClick={showMovieForm} > Add movie</Button> 
             <Button onClick={revert} > revert</Button>
         </div>
+        <AddMovie addMovie={addMovie} visible={visibilityAddMovieForm}/>
         {isLoading ? < Spinner animation="border" role="status"> </Spinner> : <MovieList noDataMessage="No Data for you firend" movies={moviesAdapter(movies)} configuration={{ starsColor }} />
         }
     </div >
