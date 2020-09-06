@@ -5,8 +5,8 @@ import FavoritePage from './components/pages/favorite-page';
 import SearchResultPage from './components/pages/search-result-page';
 
 export const Routes = [{ component: MoviesPage, path: "/home", name: "Movies" },
-{ component: ConfigurationPage, path: "/configuration", name: "configuration" },
-{ component: AboutPage, path: "/about", name: "about" },
-{ component: FavoritePage, path: "/favorites", name: "favorites" },
+{ component: ConfigurationPage, path: "/configuration", name: "Configuration" },
+{ component: AboutPage, path: "/about", name: "About" },
+{ component: FavoritePage, path: "/favorites", name: "Favorites" },
 { component: SearchResultPage, path: "/search-result", name: "Search Result" }
 ];

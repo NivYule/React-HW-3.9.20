@@ -3,8 +3,9 @@ import './App.css';
 import Container from 'react-bootstrap/Container';
 import {Routes} from './routes'
 
-import { Link, Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import { Switch, BrowserRouter as Router } from "react-router-dom";
 import NavBarApp from './components/navbar';
+import RoutesConfiguration from './components/routes-configuration';
 
 // jsx element
 
@@ -14,19 +15,10 @@ function App() {
         <Container>
             <NavBarApp />
             <Switch>
-                <RoutesConfiguration routes={Routes} />
+                <RoutesConfiguration  routes={Routes}/>
             </Switch>
         </Container>
     </Router>
-}
-
-interface IRoute {
-    component: any,
-    path: string,
-    name: string
-}
-function RoutesConfiguration(props: { routes: Array<IRoute> }) {
-    return <>{props.routes.map((route: IRoute) => <Route {...route} />)} </>
 }
 
 export default App;
